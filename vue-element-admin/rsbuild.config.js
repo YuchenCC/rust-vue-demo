@@ -129,13 +129,6 @@ module.exports = defineConfig({
                 .loader('svg-sprite-loader')
                 .options({ symbolId: 'icon-[name]' })
 
-            // 非开发环境时的额外优化
-            if (process.env.NODE_ENV !== 'development') {
-                chain.plugin('ScriptExtHtmlWebpackPlugin').use(require('script-ext-html-webpack-plugin'), [
-                    { inline: /runtime\..*\.js$/ },
-                ])
-            }
-
             // 启用 preload 优化
             // chain.plugin('preload').tap(() => [
             //     {
