@@ -6,13 +6,19 @@ const { pluginBabel } = require('@rsbuild/plugin-babel')
 const { pluginNodePolyfill } = require('@rsbuild/plugin-node-polyfill')
 const path = require('path');
 
+// 项目根目录（配置文件在 rsbuild 文件夹内，父目录即项目根目录）
+const projectRoot = path.join(__dirname, '..');
+
+// 加载环境变量
 const { publicVars } = loadEnv({
     prefixes: ['VUE_APP_', 'PUBLIC_'], // 手动加载 VUE_APP_ 环境变量
+    cwd: projectRoot, // 指定环境变量文件所在的目录
 })
 
 function resolve(dir) {
-    return path.join(__dirname, dir)
+    return path.join(projectRoot, dir)
 }
+
 module.exports = defineConfig({
     // === 1. 插件 ===
     plugins: [
@@ -43,7 +49,7 @@ module.exports = defineConfig({
     // === 2. 源配置（入口、别名等）===
     source: {
         entry: {
-            app: './src/main.js',
+            app: resolve('src/main.js'),
         },
         define: {
             ...publicVars,
@@ -54,7 +60,7 @@ module.exports = defineConfig({
 
     // === 3. HTML 模板 ===
     html: {
-        template: './public/index2.html',
+        template: resolve('public/index2.html'),
         title: 'vue Element Admin',
     },
 
@@ -70,7 +76,7 @@ module.exports = defineConfig({
             },
         },
         // Rsbuild 不支持 before() 钩子，可以通过自定义 middleware 模式实现：
-        // setupMiddlewares: [require('./mock/mock-server.js')]
+        // setupMiddlewares: [require(resolve('mock/mock-server.js'))]
     },
 
     // === 5. 输出构建配置 ===
@@ -149,3 +155,4 @@ module.exports = defineConfig({
           },
     },
 })
+

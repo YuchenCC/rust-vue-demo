@@ -1,0 +1,10 @@
+{
+  "name": "rsbuild-vue-element-admin",
+  "version": "1.0.0",
+  "description": "Rsbuild configuration for vue-element-admin",
+  "scripts": {
+    "dev": "rsbuild dev --config ./rsbuild.config.js",
+    "build": "rsbuild build --config ./rsbuild.config.js"
+  }
+}
+
