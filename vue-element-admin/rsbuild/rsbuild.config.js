@@ -63,11 +63,24 @@ module.exports = defineConfig({
         template: resolve('public/index2.html'),
         title: 'vue Element Admin',
     },
+    // === 3.5. Mock Server 配置 ===
+    dev: {
+        setupMiddlewares(middlewares, devServer) {
+            // 启动 Mock Server（独立运行在 9528 端口）
+            if (devServer) {
+                // 引入 mock server 启动函数
+                const startMockServer = require('./mock-server.js');
+                startMockServer(projectRoot)
+            }
+            
+            return middlewares
+        },
+    },
 
     // === 4. 开发服务器（对应 devServer）===
     server: {
         port: 9527,
-        open: true,
+        open: false,
         proxy: {
             // 全量代理到本地 9527（若仅需部分前缀可改为 '/api'）
             '/dev-api': {
@@ -75,8 +88,6 @@ module.exports = defineConfig({
                 changeOrigin: true,
             },
         },
-        // Rsbuild 不支持 before() 钩子，可以通过自定义 middleware 模式实现：
-        // setupMiddlewares: [require(resolve('mock/mock-server.js'))]
     },
 
     // === 5. 输出构建配置 ===
